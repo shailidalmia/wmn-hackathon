@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Query, EventEmitter, Output } from '@angular/core';
 import * as Chartist from 'chartist';
+import { Apollo } from 'apollo-angular';
+import * as Queries from '../query';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,7 +11,15 @@ import * as Chartist from 'chartist';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  contests = []
+
+  constructor(private apollo: Apollo, private data: DataService) { }
+  
+  enterContest(id: any){
+    console.log(id)
+    this.data.changeMessage(id);    
+  
+  };
   startAnimationForLineChart(chart){
       let seq: any, delays: any, durations: any;
       seq = 0;
@@ -67,6 +78,17 @@ export class DashboardComponent implements OnInit {
   };
   ngOnInit() {
       /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
+
+      this.apollo.watchQuery<any>({
+        query: Queries.GetAllContestsQuery
+      })
+      .valueChanges
+      .subscribe(({ data }) => {
+        this.contests = data.Contest
+        console.log(data.Contest)
+        console.log(this.contests)
+      })
+
 
       const dataDailySalesChart: any = {
           labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
@@ -145,6 +167,9 @@ export class DashboardComponent implements OnInit {
 
       //start animation for the Emails Subscription Chart
       this.startAnimationForBarChart(websiteViewsChart);
-  }
+  };
+
+ 
+
 
 }
