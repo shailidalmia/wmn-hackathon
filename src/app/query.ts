@@ -17,19 +17,23 @@ query getQuestion($contestID: Int!) {
   Contest(
     where: {id: {_eq: $contestID}}
   ) {
-    question
+    id,
+    question,
+    answer
   }
   }`;
 
+export const AddSubmissionQuery = gql`
+mutation insert_Submission($objects: [Submission_insert_input!]!){
+    insert_Submission(objects: $objects){
+      returning {
+        contest_id,
+        account_id,
+        is_correct
+      }
+    }
+  }
 
-  export const GetQuestionByContestQuery2 = gql`
-  {
-    Contest {
-      question
-      answer
-    }
-    Contest_by_pk(id: 10) {
-      id
-    }
-  }`;
+
+`;
   

@@ -56,7 +56,7 @@
 
                                 <mat-form-field class="example-full-width">
                                     <textarea matInput placeholder="Your Answer" matTextareaAutosize
-                                        matAutosizeMinRows=5 matAutosizeMaxRows=5></textarea>
+                                        matAutosizeMinRows=5 matAutosizeMaxRows=5 #answer></textarea>
                                 </mat-form-field>
 
                             </form>
@@ -100,7 +100,9 @@
                             <h2>
                                 <span class="tim-note"></span>
                                 <button mat-raised-button type="button"
-                                    class="btn btn btn-success btn-lg btn-left-icon" routerLink="/">
+                                    class="btn btn btn-success btn-lg btn-left-icon" 
+                                    routerLink="/"
+                                    (click)="submitContest(answer.value)">
                                     Submit
                                     <i class="material-icons">send</i>
                                 </button>
