@@ -12,28 +12,29 @@ export class TypographyComponent implements OnInit {
 
   constructor(private apollo: Apollo, private data: DataService) { }
 
-  message: string;
- 
-    contest: any;
-    question: any;
-    answer: any;
+  message: any;
+
+  contest: any;
+  question: any;
+  answer: any;
 
   ngOnInit() {
     this.data.currentMessage.subscribe(message => this.message = message)
     console.log("Message from typography ", this.message)
+    // console.log("Message from typography ", typeof parseInt(this.message))
     this.apollo.watchQuery<any>({
       query: Queries.GetQuestionByContestQuery,
       variables: {
-        "contestID" : this.message
-      }
+          'contestID': this.message
+        }
+      
     })
-    .valueChanges
-    .subscribe(({ data }) => {
-      this.contest = data.Contest
-      console.log(data.Contest)
-      console.log(this.contest)
-    })
-    
+      .valueChanges
+      .subscribe(({ data }) => {
+        this.contest = data.Contest[0]
+        console.log(this.contest)
+      })
+
   }
 
 }

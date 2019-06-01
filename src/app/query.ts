@@ -11,13 +11,25 @@ export const GetAllContestsQuery = gql`
     }
     `;
 
-
+     
 export const GetQuestionByContestQuery = gql`
-query getQuestion($contestID: jsonb) {
-  contest(
-    where: {id: {_eq: contestID}}
+query getQuestion($contestID: Int!) {
+  Contest(
+    where: {id: {_eq: $contestID}}
   ) {
     question
-    answer
   }
   }`;
+
+
+  export const GetQuestionByContestQuery2 = gql`
+  {
+    Contest {
+      question
+      answer
+    }
+    Contest_by_pk(id: 10) {
+      id
+    }
+  }`;
+  
