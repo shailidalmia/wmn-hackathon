@@ -3,13 +3,13 @@
         <div class="card">
             <div class="card-header card-header-danger">
                 <h4 class="card-title">Question</h4>
-                <p class="card-category">Created using Roboto Font Family</p>
+                <!-- <p class="card-category">Created using Roboto Font Family</p> -->
             </div>
             <div class="card-body">
                 <div id="typography">
                     <!-- <div class="card-title">
                     <h2>Typography</h2>
-                </div> -->
+                </div> --><br><br>
                     <div class="row">
                         <!-- <div class="tim-typo">
                         <h1>
@@ -49,17 +49,21 @@
                                 <small>
 
                                 </small>
-                                <form class="example-form">
 
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Answer">
-                                        </mat-form-field>
-            
-                                    </form>
                             </blockquote>
+                            <br><br>
+                            <form class="example-form">
+
+                                <mat-form-field class="example-full-width">
+                                    <textarea matInput placeholder="Your Answer" matTextareaAutosize
+                                        matAutosizeMinRows=5 matAutosizeMaxRows=5></textarea>
+                                </mat-form-field>
+
+                            </form>
+
                         </div>
 
-                        
+
                         <!-- <div class="tim-typo">
                         <span class="tim-note">Muted Text</span>
                         <p class="text-muted">
@@ -91,15 +95,18 @@
                         <span class="tim-note">Danger Text</span>
                         <p class="text-danger">
                             I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
-                    </div>
-                    <div class="tim-typo">
-                        <h2>
-                            <span class="tim-note">Small Tag</span>
-                            Header with small subtitle
-                            <br>
-                            <small>Use "small" tag for the headers</small>
-                        </h2>
                     </div> -->
+                        <div class="tim-typo">
+                            <h2>
+                                <span class="tim-note"></span>
+                                <button mat-raised-button type="button"
+                                    class="btn btn btn-success btn-lg btn-left-icon" routerLink="/">
+                                    Submit
+                                    <i class="material-icons">send</i>
+                                </button>
+                                <!-- <small>Use "small" tag for the headers</small> -->
+                            </h2>
+                        </div>
                     </div>
                 </div>
             </div>
