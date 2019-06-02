@@ -161,7 +161,7 @@ export class DashboardComponent implements OnInit {
         // .subscribe(({ data }) => {
           //   console.log(data)
           // });
-
+//this.distributeRewards({id: 5, price: 0.01})
 
           this.date = new Date();
 
@@ -204,8 +204,8 @@ export class DashboardComponent implements OnInit {
      distributeRewards(contest: any) {
     // distributeRewards() {
         // query submissions table
-
-        if(!contest.is_active)
+        console.log("In distribute rewards ", contest)
+        // if(!contest.is_active)
         this.apollo.watchQuery<any>({
           query: Queries.GetAllSubmissionsQuery,
           variables: {
@@ -236,12 +236,13 @@ export class DashboardComponent implements OnInit {
           console.log("In distribute rewards " + this.matic);
           const token = config.MATIC_TEST_TOKEN;
           const owner = config.OWNER_ADDRESS;
+          const amountN = (amount * 1000000000000000000).toString()
 
           this.matic.wallet = this.privatekeys[owner]
 
           console.log("Token : " + token);
 
-          this.matic.transferTokens(token, account, amount, {
+          this.matic.transferTokens(token, account, amountN, {
             from: owner,
             onTransactionHash: hash => {
               // action on Transaction success
