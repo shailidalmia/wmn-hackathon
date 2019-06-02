@@ -219,7 +219,6 @@ export class DashboardComponent implements OnInit {
           contest.end_dt = null;
         }
       });
-      console.log(this.date)
     }, 1000);
 
     const dataDailySalesChart: any = {
