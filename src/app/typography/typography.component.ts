@@ -4,6 +4,7 @@ import { Apollo } from 'apollo-angular';
 import * as Queries from '../query';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { ViewEncapsulation } from '@angular/core';
+declare let window: any;
 
 @Component({
   selector: 'app-typography',
@@ -12,7 +13,8 @@ import { ViewEncapsulation } from '@angular/core';
 })
 export class TypographyComponent implements OnInit {
 
-  constructor(private apollo: Apollo, private data: DataService, private _snackBar: MatSnackBar) { }
+  constructor(private apollo: Apollo, private data: DataService, private _snackBar: MatSnackBar) { 
+  }
 
   message: any;
 
@@ -22,6 +24,7 @@ export class TypographyComponent implements OnInit {
 
   submitContest(answer: any) {
 
+console.log("In TYPO" , window.web3);
     let flag = false
     this.apollo.mutate<any>({
       mutation: Queries.AddSubmissionQuery,
@@ -29,7 +32,7 @@ export class TypographyComponent implements OnInit {
         'objects': [
           {
             'contest_id': this.contest.id,
-            'account_id': 'dummy',
+            'account_id': window.web3.eth.givenProvider.selectedAddress,
             'is_correct': (answer === this.contest.answer)
           }
         ]
@@ -67,10 +70,9 @@ export class TypographyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.currentMessage.subscribe(message => this.message = message)
-    console.log("Message from typography ", this.message)
-    // console.log("Message from typography ", typeof parseInt(this.message))
-    this.apollo.watchQuery<any>({
+    this.data.currentMessage.subscribe(message => {
+      this.message = message
+          this.apollo.watchQuery<any>({
       query: Queries.GetQuestionByContestQuery,
       variables: {
         'contestID': this.message
@@ -84,6 +86,10 @@ export class TypographyComponent implements OnInit {
       })
 
     console.log(this.contest)
+    })
+    console.log("Message from typography ", this.message)
+    // console.log("Message from typography ", typeof parseInt(this.message))
+
 
   }
 
