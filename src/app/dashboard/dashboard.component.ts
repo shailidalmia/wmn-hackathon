@@ -25,6 +25,11 @@ export class DashboardComponent implements OnInit {
       this.feedGQL = feedGQL
       this.initMatic();
       this.startCountdown(20)
+
+      this.contests.forEach(contest => {
+        
+      });
+
    }
 
   startCountdown(seconds){
@@ -184,6 +189,7 @@ privatekeys = {
         this.contests = data.Contest
         console.log(data.Contest)
         console.log(this.contests)
+        console.log(this.contests[0].end_ts - Date.now())
       })
       this.feedGQL.watch()
       .valueChanges
