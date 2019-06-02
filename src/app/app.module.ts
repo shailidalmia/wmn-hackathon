@@ -24,17 +24,22 @@ import {
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { GraphQLModule } from './graphql/graphql.module';
 import { DataService } from './data.service';
-
+import {MatSnackBarModule} from '@angular/material';    
+import { FeedGQL } from './query-sub';
+import { CountDownModule } from  'ng6-countdown/dist/ng6-countdown-lib';
+// import { CountdownTimerModule } from 'ngx-countdown-timer';
 
 @NgModule({
   imports: [
-    BrowserAnimationsModule,
+    BrowserAnimationsModule,MatSnackBarModule,
     FormsModule,
     HttpModule,
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
     GraphQLModule,
+    CountDownModule,
+    // CountdownTimerModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })
@@ -44,7 +49,7 @@ import { DataService } from './data.service';
     AdminLayoutComponent,
 
   ],
-  providers: [DataService],
+  providers: [DataService, FeedGQL],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

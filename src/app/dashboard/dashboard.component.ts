@@ -8,6 +8,8 @@ import * as Queries from '../query';
 import { DataService } from '../data.service';
 
 declare let window: any;
+import {Subscription} from 'apollo-angular';
+import { FeedGQL } from '../query-sub';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,17 +19,51 @@ declare let window: any;
 export class DashboardComponent implements OnInit {
 
   contests = []
+
   web3Provider = null
   account = null
 
-  constructor(private apollo: Apollo, private data: DataService) {  
+  contest: any;
+  participantCounts = {}
+  feedGQL: any;
+
+  constructor(private apollo: Apollo, private data: DataService, feedGQL: FeedGQL) {
       if (typeof window.web3 !== 'undefined') {
         this.web3Provider = window.web3.currentProvider;
       } else {
         this.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
       }
       window.web3 = new Web3(this.web3Provider);
+
+      this.feedGQL = feedGQL
+      this.initMatic();
+      this.startCountdown(20)
+
+      this.contests.forEach(contest => {
+        
+      });
+
    }
+
+  startCountdown(seconds){
+    var counter = seconds;
+  
+    var interval = setInterval(() => {
+      console.log(counter);
+      counter--;
+      
+  
+      if(counter < 0 ){
+        
+        // The code here will run when
+        // the timer has reached zero.
+        
+        clearInterval(interval);
+        console.log('Ding!');
+      };
+    }, 1000);
+  };
+  
 
   matic = null
 
@@ -77,9 +113,24 @@ export class DashboardComponent implements OnInit {
 
   enterContest(id: any){
     console.log(id)
-    this.payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", '1000000000000000');
-    this.data.changeMessage(id);    
-  
+
+    this.apollo.watchQuery<any>({
+      query: Queries.GetQuestionByContestQuery,
+      variables: {
+          'contestID': id
+        }
+      
+    })
+      .valueChanges
+      .subscribe(({ data }) => {
+        this.contest = data.Contest[0]
+        console.log(this.contest)
+      })
+
+      console.log("dashboard ", this.contest)
+    this.data.changeMessage(id);
+    this.payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", this.contest.price.toString());
+          
   };
 
   ngOnInit() {
@@ -91,8 +142,24 @@ export class DashboardComponent implements OnInit {
         this.contests = data.Contest
         console.log(data.Contest)
         console.log(this.contests)
+        console.log(this.contests[0].end_ts - Date.now())
       })
       this.initMatic();
+
+      this.feedGQL.watch()
+      .valueChanges
+      .subscribe(result => {
+        result.data['agg_participant_data'].forEach(pair => {
+          this.participantCounts[pair.contest_id] = pair.count
+        });
+        console.log(this.participantCounts)
+      })
+      // this.participantCount = this.apollo.subscribe({
+      //   query: Queries.getAllParticipantsByContestQuery
+      // })
+      // .subscribe(({ data }) => {
+      //   console.log(data)
+      // });
   };
 
   privatekeys = {

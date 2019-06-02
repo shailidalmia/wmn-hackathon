@@ -2,8 +2,8 @@ import { Component, OnInit, Query } from '@angular/core';
 import { DataService } from '../data.service';
 import { Apollo } from 'apollo-angular';
 import * as Queries from '../query';
-import {MatSnackBarModule, MatSnackBar} from '@angular/material/snack-bar';
-import {  ViewEncapsulation } from '@angular/core';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-typography',
@@ -20,38 +20,50 @@ export class TypographyComponent implements OnInit {
   // question: any;
   // answer: any;
 
-  submitContest(answer: any){
+  submitContest(answer: any) {
 
-    // console.log("submiited")
-    // console.log(answer)
-    // console.log(this.contest)
-    // if(answer ===  this.contest.answer){
-    //   console.log("True")
-    // }
-    // else {
-    //   console.log("False")
-    // }
+    let flag = false
     this.apollo.mutate<any>({
       mutation: Queries.AddSubmissionQuery,
       variables: {
-        'objects':  [
+        'objects': [
           {
             'contest_id': this.contest.id,
             'account_id': 'dummy',
-            'is_correct': (answer ===  this.contest.answer)
+            'is_correct': (answer === this.contest.answer)
           }
         ]
       }
-    }).subscribe(({ data }) => {}, (error)=>{
-      //add toast
-      console.log('Could not add cuz ' + error);
+    }).subscribe(({ data }) => { 
+      this.openSnackBar(flag, answer)
+    }, (error) => {
+      flag = true
+      this._snackBar.open('You cannot attempt the same contest twice.', 'Done', {
+        duration: 5000,
+      });
+      this.openSnackBar(flag, answer)
     })
 
-    // openSnackBar() {
-    //   this._snackBar.open('', '', {
-    //     duration: 2000,
-    //   });
-    // }
+
+    // this._snackBar.open('hello', 'bye', {
+    //   duration: 2000,
+    // });
+  }
+  openSnackBar(flag: boolean, answer: any) {
+    
+    if(flag === false){
+      if (answer === this.contest.answer) {
+        this._snackBar.open('Congratulations, correct answer! Your prize will be deposited to your account after the contest ends.', 'Done', {
+          duration: 5000,
+        });
+      }
+      else {
+        this._snackBar.open('Oops, wrong answer!', 'Done', {
+          duration: 5000,
+        });
+      }
+    }
+    
   }
 
   ngOnInit() {
@@ -61,9 +73,9 @@ export class TypographyComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: Queries.GetQuestionByContestQuery,
       variables: {
-          'contestID': this.message
-        }
-      
+        'contestID': this.message
+      }
+
     })
       .valueChanges
       .subscribe(({ data }) => {
@@ -71,6 +83,10 @@ export class TypographyComponent implements OnInit {
         console.log(this.contest)
       })
 
+    console.log(this.contest)
+
   }
+
+
 
 }

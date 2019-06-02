@@ -7,6 +7,8 @@ export const GetAllContestsQuery = gql`
         id
         price
         contest_name
+        start_ts
+        end_ts
       }
     }
     `;
@@ -18,6 +20,7 @@ query getQuestion($contestID: Int!) {
     where: {id: {_eq: $contestID}}
   ) {
     id,
+    price,
     question,
     answer
   }
@@ -36,4 +39,12 @@ mutation insert_Submission($objects: [Submission_insert_input!]!){
 
 
 `;
-  
+
+export const getAllParticipantsByContestQuery = gql`{
+  subscription getParticipantCounts{
+    agg_participant_data {
+      contest_id
+      count
+    }
+  }
+}`
