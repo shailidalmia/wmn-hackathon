@@ -6,6 +6,8 @@ import { Apollo } from 'apollo-angular';
 import Web3 from 'web3';
 import * as Queries from '../query';
 import { DataService } from '../data.service';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+
 
 declare let window: any;
 import {Subscription} from 'apollo-angular';
@@ -27,7 +29,7 @@ export class DashboardComponent implements OnInit {
   participantCounts = {}
   feedGQL: any;
 
-  constructor(private apollo: Apollo, private data: DataService, feedGQL: FeedGQL) {
+  constructor(private apollo: Apollo, private data: DataService, feedGQL: FeedGQL, private _snackBar: MatSnackBar) {
       if (typeof window.web3 !== 'undefined') {
         this.web3Provider = window.web3.currentProvider;
       } else {
@@ -102,6 +104,9 @@ export class DashboardComponent implements OnInit {
         // action on Transaction success
         // eslint-disable-next-line
         console.log(hash);
+        this._snackBar.open('Congratulations! You have entered the contest. Receipt: ' + hash, 'Done', {
+        duration: 5000,
+        });
       },
     })
   }
@@ -124,13 +129,13 @@ export class DashboardComponent implements OnInit {
       .valueChanges
       .subscribe(({ data }) => {
         this.contest = data.Contest[0]
-        console.log(this.contest)
+         console.log("dashboard ", this.contest)
+          this.data.changeMessage(id);
+          this.payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", this.contest.price.toString());
+          
       })
 
-      console.log("dashboard ", this.contest)
-    this.data.changeMessage(id);
-    this.payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", this.contest.price.toString());
-          
+     
   };
 
   ngOnInit() {
