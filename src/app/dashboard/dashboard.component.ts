@@ -5,6 +5,8 @@ import { config }from './config';
 import { Apollo } from 'apollo-angular';
 import * as Queries from '../query';
 import { DataService } from '../data.service';
+import {Subscription} from 'apollo-angular';
+import { FeedGQL } from '../query-sub';
 //declare const payToJoin: any;
 
 @Component({
@@ -15,10 +17,34 @@ import { DataService } from '../data.service';
 export class DashboardComponent implements OnInit {
 
   contests = []
+  contest: any;
+  participantCounts = {}
+  feedGQL: any;
 
-  constructor(private apollo: Apollo, private data: DataService) {
+  constructor(private apollo: Apollo, private data: DataService, feedGQL: FeedGQL) {
+      this.feedGQL = feedGQL
       this.initMatic();
+      this.startCountdown(20)
    }
+
+  startCountdown(seconds){
+    var counter = seconds;
+  
+    var interval = setInterval(() => {
+      console.log(counter);
+      counter--;
+      
+  
+      if(counter < 0 ){
+        
+        // The code here will run when
+        // the timer has reached zero.
+        
+        clearInterval(interval);
+        console.log('Ding!');
+      };
+    }, 1000);
+  };
   
 
 privatekeys = {
@@ -71,9 +97,24 @@ privatekeys = {
 
   enterContest(id: any){
     console.log(id)
+    this.apollo.watchQuery<any>({
+      query: Queries.GetQuestionByContestQuery,
+      variables: {
+          'contestID': id
+        }
+      
+    })
+      .valueChanges
+      .subscribe(({ data }) => {
+        this.contest = data.Contest[0]
+        console.log(this.contest)
+      })
+
+      console.log("dashboard ", this.contest)
     //payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", 1000000000000000000);
-    this.payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", '1000000000000000000');
-    this.data.changeMessage(id);    
+    this.data.changeMessage(id);
+    this.payToJoin("0x7C250149936Cfd91f6145963287A2F388DF9bA28", this.contest.price.toString());
+        
   
   };
   startAnimationForLineChart(chart){
@@ -144,7 +185,21 @@ privatekeys = {
         console.log(data.Contest)
         console.log(this.contests)
       })
-
+      this.feedGQL.watch()
+      .valueChanges
+      .subscribe(result => {
+        result.data['agg_participant_data'].forEach(pair => {
+          this.participantCounts[pair.contest_id] = pair.count
+        });
+        console.log(this.participantCounts)
+      })
+      // this.participantCount = this.apollo.subscribe({
+      //   query: Queries.getAllParticipantsByContestQuery
+      // })
+      // .subscribe(({ data }) => {
+      //   console.log(data)
+      // });
+     
 
       const dataDailySalesChart: any = {
           labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],

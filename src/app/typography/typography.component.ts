@@ -47,11 +47,9 @@ export class TypographyComponent implements OnInit {
       console.log('Could not add cuz ' + error);
     })
 
-    // openSnackBar() {
-    //   this._snackBar.open('', '', {
-    //     duration: 2000,
-    //   });
-    // }
+    this._snackBar.open('hello', 'bye', {
+      duration: 2000,
+    });
   }
 
   ngOnInit() {
@@ -71,6 +69,10 @@ export class TypographyComponent implements OnInit {
         console.log(this.contest)
       })
 
+      console.log(this.contest)
+
   }
+
+  
 
 }

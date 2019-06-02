@@ -378,6 +378,8 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Participant(s)</th>
+                                <th>Ends In</th>
                                 <th></th>
                             </thead>
                             <tbody>
@@ -387,16 +389,30 @@
                                     <td>{{ contest.id }}</td>
                                     <td>{{ contest.contest_name }}</td>
                                     <td>{{ contest.price }}</td>
+                                    <td>{{ participantCounts[contest.id] }}</td>
+                                    <td></td>
                                     <!-- <td>{{ contest.id }}</td> -->
+                                    <!-- <td>
+                                        <countdown-timer
+                                            style="font-size:30px;color:white;background-color:red;padding:30px;font-family:Roboto;"
+                                            [end]="'2019-06-02 09:00:00'"></countdown-timer>
+                                    </td> -->
                                     <td>
                                         <!-- <a class="nav-link" [routerLink]="typography"> -->
-                                            <button mat-raised-button type="button" matTooltip="Enter Contest"
-                                                [matTooltipPosition]="'above'"
-                                                class="btn btn btn-success btn-link btn-lg btn-just-icon"
-                                                routerLink="/typography"
-                                                (click)="enterContest(contest.id)">
-                                                <i class="material-icons">play_circle_filled</i>
-                                            </button>
+                                        <!-- <button mat-raised-button type="button" matTooltip="Enter Contest"
+                                            [matTooltipPosition]="'above'"
+                                            class="btn btn btn-success btn-link btn-lg btn-just-icon"
+                                            routerLink="/typography" (click)="enterContest(contest.id)">
+                                            <i class="material-icons">play_circle_filled</i>
+                                        </button> -->
+
+
+                                        <button mat-raised-button type="button"
+                                            class="btn btn btn-success btn-sm btn-left-icon" routerLink="/typography"
+                                            (click)="enterContest(contest.id)">
+                                            Enter
+                                            <i class="material-icons">play_circle_filled</i>
+                                        </button>
                                         <!-- </a> -->
                                     </td>
 
